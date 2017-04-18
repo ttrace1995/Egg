@@ -23,35 +23,48 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Initializes buttons
         addOne = (Button) findViewById(R.id.add_one);
         addTwo = (Button) findViewById(R.id.add_two);
         subOne = (Button) findViewById(R.id.subtract_one);
         makeBreakfast = (Button) findViewById(R.id.make_bfast);
 
+        //Starts the service that keeps track of egg data
+        startService(new Intent(getApplicationContext(), EggService.class));
+
         addOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 //Do stuff here
-                Intent intent = new Intent(String.valueOf(CONSTANT_ONE_EGG));
+                Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
+                intent.putExtra("addOneEgg", CONSTANT_ONE_EGG);
             }
         });
 
         addTwo.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 //Do stuff here
+                Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
+                intent.putExtra("addTwoEggs", CONSTANT_TWO_EGGS);
             }
         });
 
         subOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 //Do stuff here
+                Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
+                intent.putExtra("subOneEgg", CONSTANT_MINUS_EGG);
             }
         });
 
         makeBreakfast.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 //Do stuff here
+                Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
+                intent.putExtra("makeBreakfast", CONSTANT_MAKE_BREAKFAST);
             }
         });
+
+
     }
 
 
