@@ -1,8 +1,11 @@
 package com.proj5.egg;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         addOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 //Do stuff here
+                createNotification(v);
                 Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
                 intent.putExtra("addOneEgg", CONSTANT_ONE_EGG);
             }
@@ -65,6 +69,26 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void createNotification(View view) {
+        NotificationManager notificationManager = (NotificationManager)
+                getSystemService(NOTIFICATION_SERVICE);
+
+        Intent intent = new Intent(this, BroadcastReciever.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+        // build notification
+        // the addAction re-use the same intent to keep the example short
+        Notification n  = new Notification.Builder(this)
+                .setContentTitle("My message")
+                .setContentText("Subject")
+                .setSmallIcon(R.drawable.egg)
+                .setContentIntent(pIntent)
+                .setAutoCancel(true).build();
+        //  .addAction(R.drawable.line, "", pIntent).build();
+        n.flags |= Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(0, n);
     }
 
 
