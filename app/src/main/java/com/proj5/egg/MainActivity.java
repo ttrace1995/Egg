@@ -75,20 +75,24 @@ public class MainActivity extends AppCompatActivity {
         NotificationManager notificationManager = (NotificationManager)
                 getSystemService(NOTIFICATION_SERVICE);
 
+        int requestCode = ("" + System.currentTimeMillis()).hashCode();
+
         Intent intent = new Intent(this, BroadcastReciever.class);
-        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+        PendingIntent pIntent = PendingIntent.getActivity(this, requestCode, intent, 0);
+
+//        PendingIntent pIntent = PendingIntent.getActivity(this, requestCode , intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // build notification
         // the addAction re-use the same intent to keep the example short
         Notification n  = new Notification.Builder(this)
                 .setContentTitle("My message")
-                .setContentText("Subject")
+                .setContentText("Subject: " + requestCode)
                 .setSmallIcon(R.drawable.egg)
                 .setContentIntent(pIntent)
                 .setAutoCancel(true).build();
         //  .addAction(R.drawable.line, "", pIntent).build();
-        n.flags |= Notification.FLAG_AUTO_CANCEL;
-        notificationManager.notify(0, n);
+//        n.flags |= Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(requestCode, n);
     }
 
 
