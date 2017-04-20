@@ -42,57 +42,54 @@ public class MainActivity extends AppCompatActivity {
 
         addOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //Do stuff here
                 createNotification(v);
-                Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
-                intent.putExtra("addOneEgg", CONSTANT_ONE_EGG);
+                intentCaller(CONSTANT_ONE_EGG);
             }
         });
 
         addTwo.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //Do stuff here
                 createNotification(v);
                 createNotification(v);
-                Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
-                intent.putExtra("addTwoEggs", CONSTANT_TWO_EGGS);
+                intentCaller(CONSTANT_TWO_EGGS);
             }
         });
 
         subOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //Do stuff here
-                removeNotification(v);
-                Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
-                intent.putExtra("subOneEgg", CONSTANT_MINUS_EGG);
+                removeNotification(CONSTANT_MINUS_EGG);
+                intentCaller(CONSTANT_MINUS_EGG);
             }
         });
 
         makeBreakfast.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //Do stuff here
-                removeForBreakfast(v);
-                Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
-                intent.putExtra("makeBreakfast", CONSTANT_MAKE_BREAKFAST);
+                removeNotification(CONSTANT_MAKE_BREAKFAST);
+                intentCaller(CONSTANT_MAKE_BREAKFAST);
             }
         });
     }
 
-    public void removeForBreakfast(View view) {
-        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        if(ids.size() >= 6) {
-            for(int i = 0; i < 6; i++) {
-                notificationManager.cancel(ids.get(0));
-                ids.remove(0);
-            }
-        }
+    private void intentCaller(int num) {
+        Intent intent = new Intent(getApplicationContext(), EggBR.class);
+        intent.putExtra("eggCount", num);
+        sendBroadcast(intent);
     }
 
-    public void removeNotification(View view) {
+    public void removeNotification(int num) {
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         if(ids.size() != 0) {
-            notificationManager.cancel(ids.get(0));
-            ids.remove(0);
+            if(num == CONSTANT_MINUS_EGG) {
+                notificationManager.cancel(ids.get(0));
+                ids.remove(0);
+            } else if (num == CONSTANT_MAKE_BREAKFAST) {
+                if(ids.size() >= 6) {
+                    for(int i = 0; i < 6; i++) {
+                        notificationManager.cancel(ids.get(0));
+                        ids.remove(0);
+                    }
+                }
+            }
         }
     }
 
@@ -103,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         int requestCode = ("" + System.currentTimeMillis()).hashCode();
         ids.add(requestCode);
 
-        Intent intent = new Intent(this, BroadcastReciever.class);
+        Intent intent = new Intent(this, EggBR.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, requestCode, intent, 0);
 
 //        PendingIntent pIntent = PendingIntent.getActivity(this, requestCode , intent, PendingIntent.FLAG_UPDATE_CURRENT);

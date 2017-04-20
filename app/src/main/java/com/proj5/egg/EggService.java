@@ -10,23 +10,36 @@ import android.widget.Toast;
  */
 public class EggService extends Service {
 
-    private int currentEggCount;
+    private static int currentEggCount;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "In Service", Toast.LENGTH_SHORT).show();
-        doAgain();
 
-        stopSelf();
+        currentEggCount = 0;
+
         //this was zero in example not sure what ive changed it to but it was yelling at me
         return Service.START_NOT_STICKY;
     }
 
-    void doAgain(){
-//        Intent startIntent = new Intent("com.proj5.egg.MYACTION");
-//        PendingIntent startPIntent = PendingIntent.getBroadcast(this, 0, startIntent, 0);
-//        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-//        alarm.set(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + + TWO_SECONDS, startPIntent);
+    public static void incrementEggCountOnce(){
+        currentEggCount++;
+    }
+
+    public static void incrementEggCountTwice(){
+        currentEggCount += 2;
+    }
+
+    public static void decrementEggCountOnce() {
+        currentEggCount--;
+    }
+
+    public static void makeBreakfast() {
+        if(currentEggCount >= 6) {
+            currentEggCount -= 6;
+        } else {
+//            im not really sure
+        }
     }
 
     @Override

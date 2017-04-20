@@ -15,6 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".EggBR">
+            <intent-filter>
+                <action android:name="com.proj5.egg.BroadcastReciever" />
+            </intent-filter>
+        </receiver>
         <service android:name=".EggService"/>
     </application>
 
