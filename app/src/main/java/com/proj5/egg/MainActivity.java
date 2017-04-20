@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private final int CONSTANT_MINUS_EGG = -1;
     private final int CONSTANT_MAKE_BREAKFAST = -6;
 
-    ArrayList<Integer> ids = new ArrayList<Integer>();
+    ArrayList<Integer> ids = new ArrayList<>();
 
     Button addOne;
     Button addTwo;
@@ -71,11 +71,21 @@ public class MainActivity extends AppCompatActivity {
         makeBreakfast.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 //Do stuff here
-
+                removeForBreakfast(v);
                 Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
                 intent.putExtra("makeBreakfast", CONSTANT_MAKE_BREAKFAST);
             }
         });
+    }
+
+    public void removeForBreakfast(View view) {
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        if(ids.size() >= 6) {
+            for(int i = 0; i < 6; i++) {
+                notificationManager.cancel(ids.get(0));
+                ids.remove(0);
+            }
+        }
     }
 
     public void removeNotification(View view) {
