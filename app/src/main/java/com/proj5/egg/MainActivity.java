@@ -3,11 +3,14 @@ package com.proj5.egg;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private final int CONSTANT_TWO_EGGS = 2;
     private final int CONSTANT_MINUS_EGG = -1;
     private final int CONSTANT_MAKE_BREAKFAST = -6;
+
+    ArrayList<Integer> ids = new ArrayList<Integer>();
 
     Button addOne;
     Button addTwo;
@@ -47,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         addTwo.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 //Do stuff here
+                createNotification(v);
+                createNotification(v);
                 Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
                 intent.putExtra("addTwoEggs", CONSTANT_TWO_EGGS);
             }
@@ -55,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         subOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 //Do stuff here
+                removeNotification(v);
                 Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
                 intent.putExtra("subOneEgg", CONSTANT_MINUS_EGG);
             }
@@ -63,12 +71,19 @@ public class MainActivity extends AppCompatActivity {
         makeBreakfast.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 //Do stuff here
+
                 Intent intent = new Intent(getApplicationContext(), BroadcastReciever.class);
                 intent.putExtra("makeBreakfast", CONSTANT_MAKE_BREAKFAST);
             }
         });
+    }
 
-
+    public void removeNotification(View view) {
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        if(ids.size() != 0) {
+            notificationManager.cancel(ids.get(0));
+            ids.remove(0);
+        }
     }
 
     public void createNotification(View view) {
@@ -76,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 getSystemService(NOTIFICATION_SERVICE);
 
         int requestCode = ("" + System.currentTimeMillis()).hashCode();
+        ids.add(requestCode);
 
         Intent intent = new Intent(this, BroadcastReciever.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, requestCode, intent, 0);
