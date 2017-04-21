@@ -16,15 +16,6 @@ public class EggService extends Service {
 
     private static int currentEggCount = 0;
     ArrayList<Integer> ids = new ArrayList<>();
-    private final String PROJECT_NAME = "Egg";
-    private final String ONE_EGG_MESSAGE = "One Added!";
-    private final String TWO_EGGS_MESSAGE = "Two Added!";
-    private final int CONSTANT_ONE_EGG = 1;
-    private final int CONSTANT_TWO_EGGS = 2;
-    private final int CONSTANT_MINUS_EGG = -1;
-    private final int CONSTANT_MAKE_BREAKFAST = -6;
-    private final int CONSTANT_OMELET_AMOUNT = 6;
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -83,31 +74,40 @@ public class EggService extends Service {
         Intent intent = new Intent(getApplicationContext(), EggBR.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, requestCode, intent, 0);
 
-        if (message == CONSTANT_ONE_EGG) {
+        if (message == CONSTANTS.CONSTANT_ONE_EGG) {
             incrementEggCountOnce();
             Notification n = new Notification.Builder(this)
-                    .setContentTitle(PROJECT_NAME)
-                    .setContentText(ONE_EGG_MESSAGE)
+                    .setContentTitle(CONSTANTS.PROJECT_NAME)
+                    .setContentText(CONSTANTS.ONE_EGG_MESSAGE)
                     .setSmallIcon(R.drawable.egg)
                     .setContentIntent(pIntent)
                     .setAutoCancel(true).build();
             notificationManager.notify(requestCode, n);
-        } else if (message == CONSTANT_TWO_EGGS) {
+        } else if (message == CONSTANTS.CONSTANT_TWO_EGGS) {
             incrementEggCountTwice();
             Notification n = new Notification.Builder(this)
-                    .setContentTitle(PROJECT_NAME)
-                    .setContentText(TWO_EGGS_MESSAGE)
+                    .setContentTitle(CONSTANTS.PROJECT_NAME)
+                    .setContentText(CONSTANTS.TWO_EGGS_MESSAGE)
                     .setSmallIcon(R.drawable.egg)
                     .setContentIntent(pIntent)
                     .setAutoCancel(true).build();
             notificationManager.notify(requestCode, n);
-        } else if (message == CONSTANT_MAKE_BREAKFAST) {
+        } else if (message == CONSTANTS.CONSTANT_MINUS_EGG) {
+            decrementEggCountOnce();
+            Notification n = new Notification.Builder(this)
+                    .setContentTitle(CONSTANTS.PROJECT_NAME)
+                    .setContentText(CONSTANTS.ONE_EGG_REMOVED)
+                    .setSmallIcon(R.drawable.egg)
+                    .setContentIntent(pIntent)
+                    .setAutoCancel(true).build();
+            notificationManager.notify(requestCode, n);
+        } else if (message == CONSTANTS.CONSTANT_MAKE_BREAKFAST) {
             int eggs = getCurrentEggCount();
-            if (eggs >= CONSTANT_OMELET_AMOUNT) {
+            if (eggs >= CONSTANTS.CONSTANT_OMELET_AMOUNT) {
                 makeBreakfast();
-                String omeletMessage = "We are having omelets, we have " + (eggs - CONSTANT_OMELET_AMOUNT) + " eggs available";
+                String omeletMessage = "We are having omelets, we have " + (eggs - CONSTANTS.CONSTANT_OMELET_AMOUNT) + " eggs available";
                 Notification n = new Notification.Builder(this)
-                        .setContentTitle(PROJECT_NAME)
+                        .setContentTitle(CONSTANTS.PROJECT_NAME)
                         .setContentText(omeletMessage)
                         .setSmallIcon(R.drawable.egg)
                         .setContentIntent(pIntent)
@@ -116,7 +116,7 @@ public class EggService extends Service {
             } else {
                 String otherMessage = "We are having gruel, we have " + eggs + " eggs available";
                 Notification n = new Notification.Builder(this)
-                        .setContentTitle(PROJECT_NAME)
+                        .setContentTitle(CONSTANTS.PROJECT_NAME)
                         .setContentText(otherMessage)
                         .setSmallIcon(R.drawable.egg)
                         .setContentIntent(pIntent)

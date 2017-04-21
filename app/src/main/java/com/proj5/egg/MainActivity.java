@@ -16,15 +16,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Integer> ids = new ArrayList<>();
 
     public static SharedPreferences preferences;
-    private final String PROJECT_NAME = "Egg";
-    private final String ONE_EGG_MESSAGE = "One Added!";
-    private final String TWO_EGGS_MESSAGE = "Two Added!";
-
-    private final int CONSTANT_ONE_EGG = 1;
-    private final int CONSTANT_TWO_EGGS = 2;
-    private final int CONSTANT_MINUS_EGG = -1;
-    private final int CONSTANT_MAKE_BREAKFAST = -6;
-    private final int CONSTANT_OMELET_AMOUNT = 6;
 
     Button addOne;
     Button addTwo;
@@ -48,25 +39,25 @@ public class MainActivity extends AppCompatActivity {
 
         addOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                intentCaller(CONSTANT_ONE_EGG);
+                intentCaller(CONSTANTS.CONSTANT_ONE_EGG);
             }
         });
 
         addTwo.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                intentCaller(CONSTANT_TWO_EGGS);
+                intentCaller(CONSTANTS.CONSTANT_TWO_EGGS);
             }
         });
 
         subOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                intentCaller(CONSTANT_MINUS_EGG);
+                intentCaller(CONSTANTS.CONSTANT_MINUS_EGG);
             }
         });
 
         makeBreakfast.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                intentCaller(CONSTANT_MAKE_BREAKFAST);
+                intentCaller(CONSTANTS.CONSTANT_MAKE_BREAKFAST);
             }
         });
     }
