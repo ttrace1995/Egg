@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -29,8 +28,6 @@ public class EggService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        Toast.makeText(this, "In Service", Toast.LENGTH_SHORT).show();
-
         if(getCurrentEggCount() != 0) {
             currentEggCount = getCurrentEggCount();
         }
@@ -38,27 +35,24 @@ public class EggService extends Service {
         int extra = Integer.valueOf(intent.getStringExtra("val"));
         createNotification(extra);
         //this was zero in example not sure what ive changed it to but it was yelling at me
+        stopSelf();
         return Service.START_NOT_STICKY;
     }
 
     public static void incrementEggCountOnce() {
         currentEggCount++;
-        Log.d("EggCount(add one):*****", ""+currentEggCount);
-//        saveToShared(currentEggCount);
         MainActivity.preferences.edit().putInt( "egg_count", currentEggCount ).commit();
     }
 
     public static void incrementEggCountTwice() {
         currentEggCount++;
         currentEggCount++;
-        Log.d("EggCount(add two):*****", ""+currentEggCount);
         MainActivity.preferences.edit().putInt( "egg_count", currentEggCount ).commit();
     }
 
     public static void decrementEggCountOnce() {
         if (currentEggCount > 0) {
             currentEggCount--;
-            Log.d("EggCount(minus one):***", ""+currentEggCount);
             MainActivity.preferences.edit().putInt( "egg_count", currentEggCount ).commit();
         }
     }
@@ -66,10 +60,7 @@ public class EggService extends Service {
     public static void makeBreakfast() {
         if (getCurrentEggCount() >= 6) {
             currentEggCount -= 6;
-            Log.d("EggCount(breakfast):***", ""+currentEggCount);
             MainActivity.preferences.edit().putInt( "egg_count", currentEggCount ).commit();
-        } else {
-//            im not really sure
         }
     }
 
@@ -112,7 +103,6 @@ public class EggService extends Service {
             notificationManager.notify(requestCode, n);
         } else if (message == CONSTANT_MAKE_BREAKFAST) {
             int eggs = getCurrentEggCount();
-            Log.d("egg count in notifica: ", ""+eggs);
             if (eggs >= CONSTANT_OMELET_AMOUNT) {
                 makeBreakfast();
                 String omeletMessage = "We are having omelets, we have " + (eggs - CONSTANT_OMELET_AMOUNT) + " eggs available";

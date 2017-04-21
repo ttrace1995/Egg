@@ -45,37 +45,28 @@ public class MainActivity extends AppCompatActivity {
         subOne = (Button) findViewById(R.id.subtract_one);
         makeBreakfast = (Button) findViewById(R.id.make_bfast);
 
-        //Starts the service that keeps track of egg data
-        //startService(new Intent(getApplicationContext(), EggService.class));
 
         addOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //createNotification(CONSTANT_ONE_EGG);
                 intentCaller(CONSTANT_ONE_EGG);
-//                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
 
         addTwo.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-               // createNotification(CONSTANT_TWO_EGGS);
                 intentCaller(CONSTANT_TWO_EGGS);
-//                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
 
         subOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 intentCaller(CONSTANT_MINUS_EGG);
-//                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
 
         makeBreakfast.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //createNotification(CONSTANT_MAKE_BREAKFAST);
                 intentCaller(CONSTANT_MAKE_BREAKFAST);
-//                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -84,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), EggBR.class);
         intent.putExtra("eggCount", num);
         sendBroadcast(intent);
-        //stopService(intent);
     }
 
 }
