@@ -4,18 +4,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
@@ -39,15 +31,8 @@ public class EggService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 //        Toast.makeText(this, "In Service", Toast.LENGTH_SHORT).show();
 
-        if (fileExists()) {
-            String hold = readFromInternalStorage();
-            if (hold == "") {
-//                Toast.makeText(EggService.this, "File found empty", Toast.LENGTH_SHORT).show();
-                currentEggCount = 0;
-            } else {
-//                Toast.makeText(EggService.this, "File found with number", Toast.LENGTH_SHORT).show();
-                currentEggCount = Integer.valueOf(hold);
-            }
+        if(getCurrentEggCount() != 0) {
+            currentEggCount = getCurrentEggCount();
         }
 
         int extra = Integer.valueOf(intent.getStringExtra("val"));
@@ -64,7 +49,8 @@ public class EggService extends Service {
     }
 
     public static void incrementEggCountTwice() {
-        currentEggCount += 2;
+        currentEggCount++;
+        currentEggCount++;
         Log.d("EggCount(add two):*****", ""+currentEggCount);
         MainActivity.preferences.edit().putInt( "egg_count", currentEggCount ).commit();
     }
@@ -88,52 +74,12 @@ public class EggService extends Service {
     }
 
     public static int getCurrentEggCount() {
-        return MainActivity.preferences.getInt( "egg_count", 0 );
+        return MainActivity.preferences.getInt( "egg_count", currentEggCount );
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    @Override
-    public void onDestroy() {
-        String filename = "eggcount_android.txt";
-        String string = String.valueOf(currentEggCount);
-        FileOutputStream outputStream;
-        try {
-            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-            outputStream.write(string.getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String readFromInternalStorage() {
-        FileInputStream fis = null;
-        try {
-            fis = this.openFileInput("eggcount_android.txt");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        InputStreamReader isr = new InputStreamReader(fis);
-        BufferedReader bufferedReader = new BufferedReader(isr);
-        StringBuilder sb = new StringBuilder();
-        String line;
-        try {
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sb.toString().trim();
-    }
-
-    public boolean fileExists() {
-        File file = getBaseContext().getFileStreamPath("eggcount_android.txt");
-        return file.exists();
     }
 
     public void createNotification(int message) {
@@ -147,6 +93,7 @@ public class EggService extends Service {
         PendingIntent pIntent = PendingIntent.getActivity(this, requestCode, intent, 0);
 
         if (message == CONSTANT_ONE_EGG) {
+            incrementEggCountOnce();
             Notification n = new Notification.Builder(this)
                     .setContentTitle(PROJECT_NAME)
                     .setContentText(ONE_EGG_MESSAGE)
@@ -155,6 +102,7 @@ public class EggService extends Service {
                     .setAutoCancel(true).build();
             notificationManager.notify(requestCode, n);
         } else if (message == CONSTANT_TWO_EGGS) {
+            incrementEggCountTwice();
             Notification n = new Notification.Builder(this)
                     .setContentTitle(PROJECT_NAME)
                     .setContentText(TWO_EGGS_MESSAGE)
@@ -163,9 +111,11 @@ public class EggService extends Service {
                     .setAutoCancel(true).build();
             notificationManager.notify(requestCode, n);
         } else if (message == CONSTANT_MAKE_BREAKFAST) {
-            int eggs = EggService.getCurrentEggCount();
+            int eggs = getCurrentEggCount();
+            Log.d("egg count in notifica: ", ""+eggs);
             if (eggs >= CONSTANT_OMELET_AMOUNT) {
-                String omeletMessage = "We are having omelets, we have " + (getCurrentEggCount() - CONSTANT_OMELET_AMOUNT) + " eggs available";
+                makeBreakfast();
+                String omeletMessage = "We are having omelets, we have " + (eggs - CONSTANT_OMELET_AMOUNT) + " eggs available";
                 Notification n = new Notification.Builder(this)
                         .setContentTitle(PROJECT_NAME)
                         .setContentText(omeletMessage)
@@ -174,7 +124,7 @@ public class EggService extends Service {
                         .setAutoCancel(true).build();
                 notificationManager.notify(requestCode, n);
             } else {
-                String otherMessage = "We are having gruel, we have " + getCurrentEggCount() + " eggs available";
+                String otherMessage = "We are having gruel, we have " + eggs + " eggs available";
                 Notification n = new Notification.Builder(this)
                         .setContentTitle(PROJECT_NAME)
                         .setContentText(otherMessage)
