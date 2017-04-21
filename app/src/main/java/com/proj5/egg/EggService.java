@@ -1,16 +1,9 @@
 package com.proj5.egg;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.view.View;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 /**
  * Created by traceys5 on 4/18/17.
@@ -18,6 +11,7 @@ import java.util.ArrayList;
 public class EggService extends Service {
 
     private static int currentEggCount;
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -47,7 +41,7 @@ public class EggService extends Service {
         }
     }
 
-    public int getCurrentEggCount() {
+    public static int getCurrentEggCount() {
         return currentEggCount;
     }
 
@@ -55,4 +49,5 @@ public class EggService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
 }

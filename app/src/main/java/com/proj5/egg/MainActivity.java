@@ -3,12 +3,12 @@ package com.proj5.egg;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private final int CONSTANT_TWO_EGGS = 2;
     private final int CONSTANT_MINUS_EGG = -1;
     private final int CONSTANT_MAKE_BREAKFAST = -6;
+    private final int CONSTANT_OMELET_AMOUNT = 6;
 
     Button addOne;
     Button addTwo;
@@ -48,30 +49,32 @@ public class MainActivity extends AppCompatActivity {
 
         addOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                createNotification(v, CONSTANT_ONE_EGG);
+                createNotification(CONSTANT_ONE_EGG);
                 intentCaller(CONSTANT_ONE_EGG);
+                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
 
         addTwo.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                createNotification(v, CONSTANT_TWO_EGGS);
-                //createNotification(v, CONSTANT_TWO_EGGS);
+                createNotification(CONSTANT_TWO_EGGS);
                 intentCaller(CONSTANT_TWO_EGGS);
+                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
 
         subOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //removeNotification(CONSTANT_MINUS_EGG);
                 intentCaller(CONSTANT_MINUS_EGG);
+                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
 
         makeBreakfast.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //removeNotification(CONSTANT_MAKE_BREAKFAST);
+                createNotification(CONSTANT_MAKE_BREAKFAST);
                 intentCaller(CONSTANT_MAKE_BREAKFAST);
+                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         sendBroadcast(intent);
     }
 
-    public void createNotification(View v, int message) {
+    public void createNotification(int message) {
 
     NotificationManager notificationManager = (NotificationManager)
             getSystemService(NOTIFICATION_SERVICE);
@@ -110,6 +113,29 @@ public class MainActivity extends AppCompatActivity {
                     .setContentIntent(pIntent)
                     .setAutoCancel(true).build();
             notificationManager.notify(requestCode, n);
+        }
+
+        else if (message == CONSTANT_MAKE_BREAKFAST) {
+            int eggs = EggService.getCurrentEggCount();
+            if (eggs >= CONSTANT_OMELET_AMOUNT) {
+                String omeletMessage = "We are having omelets, we have " + (eggs - CONSTANT_OMELET_AMOUNT) + " eggs available";
+                Notification n = new Notification.Builder(this)
+                        .setContentTitle(PROJECT_NAME)
+                        .setContentText(omeletMessage)
+                        .setSmallIcon(R.drawable.egg)
+                        .setContentIntent(pIntent)
+                        .setAutoCancel(true).build();
+                notificationManager.notify(requestCode, n);
+            } else {
+                String otherMessage = "We are having gruel, we have " + eggs + " eggs available";
+                Notification n = new Notification.Builder(this)
+                        .setContentTitle(PROJECT_NAME)
+                        .setContentText(otherMessage)
+                        .setSmallIcon(R.drawable.egg)
+                        .setContentIntent(pIntent)
+                        .setAutoCancel(true).build();
+                notificationManager.notify(requestCode, n);
+            }
         }
 }
 
