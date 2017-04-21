@@ -20,17 +20,21 @@ import java.io.InputStreamReader;
  */
 public class EggService extends Service {
 
-    private static int currentEggCount;
-
+    private static int currentEggCount = 0;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "In Service", Toast.LENGTH_SHORT).show();
         if (fileExists()) {
-            currentEggCount = Integer.valueOf(readFromInternalStorage());
-        } else {
-            Toast.makeText(EggService.this, "No file", Toast.LENGTH_SHORT).show();
-            currentEggCount = 0;
+            String hold = readFromInternalStorage();
+            if (hold == "") {
+                Toast.makeText(EggService.this, "File found empty", Toast.LENGTH_SHORT).show();
+                currentEggCount = 0;
+            }
+            else {
+                Toast.makeText(EggService.this, "File found with number", Toast.LENGTH_SHORT).show();
+                currentEggCount = Integer.valueOf(hold);
+            }
         }
         //this was zero in example not sure what ive changed it to but it was yelling at me
         return Service.START_NOT_STICKY;
@@ -67,13 +71,9 @@ public class EggService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d("xxxxxxxxxxxxxxxxx", "yo");
-        writeToInternalStorage(String.valueOf(currentEggCount));
-    }
-
-    public void writeToInternalStorage(String eggCount) {
         String filename = "eggcount_android.txt";
-        String string = eggCount;
+        String string = String.valueOf(currentEggCount);
+        Log.d("xxxxxxxxxx",string);
         FileOutputStream outputStream;
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
@@ -82,6 +82,11 @@ public class EggService extends Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void writeToInternalStorage(String eggCount) {
+
     }
 
     public String readFromInternalStorage() {
