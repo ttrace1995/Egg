@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), EggBR.class);
         intent.putExtra("eggCount", num);
         sendBroadcast(intent);
+        stopService(intent);
     }
 
     public void createNotification(int message) {

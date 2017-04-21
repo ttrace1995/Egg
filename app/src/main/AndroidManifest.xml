@@ -20,7 +20,8 @@
                 <action android:name="com.proj5.egg.BroadcastReciever" />
             </intent-filter>
         </receiver>
-        <service android:name=".EggService"/>
+        <service android:name=".EggService" android:stopWithTask="true"/>
+
     </application>
 
 </manifest>
