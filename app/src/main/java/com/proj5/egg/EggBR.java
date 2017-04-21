@@ -14,13 +14,29 @@ public class EggBR extends BroadcastReceiver {
         int eggAmount = intent.getIntExtra("eggCount", 0);
 //        Toast.makeText(context, "eggAmount: " + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
         if (eggAmount == 1) {
+            Intent serve = new Intent(context, EggService.class);
+            serve.putExtra("val", "1");
+            context.startService(serve);
             EggService.incrementEggCountOnce();
+            context.stopService(serve);
         } else if (eggAmount == 2) {
+            Intent serve = new Intent(context, EggService.class);
+            serve.putExtra("val", "2");
+            context.startService(serve);
             EggService.incrementEggCountTwice();
+            context.stopService(serve);
         } else if (eggAmount == -1) {
+            Intent serve = new Intent(context, EggService.class);
+            serve.putExtra("val", "-1");
+            context.startService(serve);
             EggService.decrementEggCountOnce();
+            context.stopService(serve);
         } else if (eggAmount == -6) {
+            Intent serve = new Intent(context, EggService.class);
+            serve.putExtra("val", "-6");
+            context.startService(serve);
             EggService.makeBreakfast();
+            context.stopService(serve);
         }
     }
 
