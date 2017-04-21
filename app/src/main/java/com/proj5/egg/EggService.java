@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,15 +37,15 @@ public class EggService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "In Service", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "In Service", Toast.LENGTH_SHORT).show();
 
         if (fileExists()) {
             String hold = readFromInternalStorage();
             if (hold == "") {
-                Toast.makeText(EggService.this, "File found empty", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(EggService.this, "File found empty", Toast.LENGTH_SHORT).show();
                 currentEggCount = 0;
             } else {
-                Toast.makeText(EggService.this, "File found with number", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(EggService.this, "File found with number", Toast.LENGTH_SHORT).show();
                 currentEggCount = Integer.valueOf(hold);
             }
         }
@@ -59,28 +58,37 @@ public class EggService extends Service {
 
     public static void incrementEggCountOnce() {
         currentEggCount++;
+        Log.d("EggCount(add one):*****", ""+currentEggCount);
+//        saveToShared(currentEggCount);
+        MainActivity.preferences.edit().putInt( "egg_count", currentEggCount ).commit();
     }
 
     public static void incrementEggCountTwice() {
         currentEggCount += 2;
+        Log.d("EggCount(add two):*****", ""+currentEggCount);
+        MainActivity.preferences.edit().putInt( "egg_count", currentEggCount ).commit();
     }
 
     public static void decrementEggCountOnce() {
         if (currentEggCount > 0) {
             currentEggCount--;
+            Log.d("EggCount(minus one):***", ""+currentEggCount);
+            MainActivity.preferences.edit().putInt( "egg_count", currentEggCount ).commit();
         }
     }
 
     public static void makeBreakfast() {
-        if (currentEggCount >= 6) {
+        if (getCurrentEggCount() >= 6) {
             currentEggCount -= 6;
+            Log.d("EggCount(breakfast):***", ""+currentEggCount);
+            MainActivity.preferences.edit().putInt( "egg_count", currentEggCount ).commit();
         } else {
 //            im not really sure
         }
     }
 
     public static int getCurrentEggCount() {
-        return currentEggCount;
+        return MainActivity.preferences.getInt( "egg_count", 0 );
     }
 
     @Override
@@ -157,7 +165,7 @@ public class EggService extends Service {
         } else if (message == CONSTANT_MAKE_BREAKFAST) {
             int eggs = EggService.getCurrentEggCount();
             if (eggs >= CONSTANT_OMELET_AMOUNT) {
-                String omeletMessage = "We are having omelets, we have " + (eggs - CONSTANT_OMELET_AMOUNT) + " eggs available";
+                String omeletMessage = "We are having omelets, we have " + (getCurrentEggCount() - CONSTANT_OMELET_AMOUNT) + " eggs available";
                 Notification n = new Notification.Builder(this)
                         .setContentTitle(PROJECT_NAME)
                         .setContentText(omeletMessage)
@@ -166,7 +174,7 @@ public class EggService extends Service {
                         .setAutoCancel(true).build();
                 notificationManager.notify(requestCode, n);
             } else {
-                String otherMessage = "We are having gruel, we have " + eggs + " eggs available";
+                String otherMessage = "We are having gruel, we have " + getCurrentEggCount() + " eggs available";
                 Notification n = new Notification.Builder(this)
                         .setContentTitle(PROJECT_NAME)
                         .setContentText(otherMessage)

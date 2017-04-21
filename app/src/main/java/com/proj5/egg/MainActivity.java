@@ -1,14 +1,11 @@
 package com.proj5.egg;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Integer> ids = new ArrayList<>();
 
+    public static SharedPreferences preferences;
     private final String PROJECT_NAME = "Egg";
     private final String ONE_EGG_MESSAGE = "One Added!";
     private final String TWO_EGGS_MESSAGE = "Two Added!";
@@ -38,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        preferences = getSharedPreferences( getPackageName() + "_preferences", MODE_PRIVATE);
+
         //Initializes buttons
         addOne = (Button) findViewById(R.id.add_one);
         addTwo = (Button) findViewById(R.id.add_two);
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //createNotification(CONSTANT_ONE_EGG);
                 intentCaller(CONSTANT_ONE_EGG);
-                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -59,14 +60,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                // createNotification(CONSTANT_TWO_EGGS);
                 intentCaller(CONSTANT_TWO_EGGS);
-                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
 
         subOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 intentCaller(CONSTANT_MINUS_EGG);
-                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //createNotification(CONSTANT_MAKE_BREAKFAST);
                 intentCaller(CONSTANT_MAKE_BREAKFAST);
-                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "" + EggService.getCurrentEggCount(), Toast.LENGTH_SHORT).show();
             }
         });
     }
