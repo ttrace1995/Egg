@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
- * Created by traceys5 on 4/18/17.
+ * Created by Tyler Tracey and Patrick Hennis
  */
 public class EggBR extends BroadcastReceiver {
 

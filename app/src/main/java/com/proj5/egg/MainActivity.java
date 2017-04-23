@@ -9,7 +9,9 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
-
+/**
+ * Created by Tyler Tracey and Patrick Hennis
+ */
 public class MainActivity extends AppCompatActivity {
 
 

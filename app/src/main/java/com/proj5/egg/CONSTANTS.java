@@ -1,7 +1,7 @@
 package com.proj5.egg;
 
 /**
- * Created by patrickhennis on 4/21/17.
+ * Created by Tyler Tracey and Patrick Hennis
  */
 
 public class CONSTANTS {

@@ -10,7 +10,7 @@ import android.os.IBinder;
 import java.util.ArrayList;
 
 /**
- * Created by traceys5 on 4/18/17.
+ * Created by Tyler Tracey and Patrick Hennis
  */
 public class EggService extends Service {
 
